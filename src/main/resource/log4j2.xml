@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN" monitorInterval="150">
+
+    <properties>
+        <property name="LOG_HOME">D:\data\logs\</property>
+        <property name="ERROR_LOG_FILE_NAME">amq-consumer-error</property>
+    </properties>
+
+    <Appenders>
+        <File name="error" fileName="${LOG_HOME}/amq-consumer-error.log" append="true">
+            <Filters>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout
+                    pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p] projectName : purchase-soa %X{hunterid} [%t] (%c:%L) - %m%n"/>
+        </File>
+        <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
+<!--
+        <RollingRandomAccessFile name="file"
+                                 fileName="${LOG_HOME}/${ERROR_LOG_FILE_NAME}.log"
+                                 filePattern="${LOG_HOME}/${ERROR_LOG_FILE_NAME}.%d{yyyy-MM-dd-HH}-%i.log.bak"
+                                 immediateFlush="false" append="true">
+            <PatternLayout
+                    pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p] projectName : promotion-soa %X{hunterid} [%t] (%c:%L) - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="24"/>
+                <SizeBasedTriggeringPolicy size="2 GB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingRandomAccessFile>
+-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+    </Appenders>
+
+    <Loggers>
+
+        <!--<AppenderRef ref="file" />-->
+        <Root level="debug"  includeLocation="false">
+            <AppenderRef ref="error" />
+            <AppenderRef ref="Console"/>
+        </Root>
+
+
+        <logger name="org.springframework" level="warn" />
+        <logger name="org.mybatis.spring.SqlSessionUtils" level="info" />
+    </Loggers>
+
+</Configuration>
